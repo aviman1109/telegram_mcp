@@ -27,6 +27,15 @@ Telegram Bot API MCP server for the Casper AI Platform.
 - send_message(...)   — Send to any specific chat/topic (for cross-channel use)
 - get_bot_info()      — Bot identity
 
+## Direct Messages (優先用於訓練 / 比賽即時推播)
+
+Casper 的 DM chat_id = **8209401698**（`@aviman1109`，private chat with `@casper_nexus_bot`）。
+訓練、比賽、LiveTrack 等需要 iOS Siri 播報的情境一律走 DM：topic 訊息會被 iPhone 歸類為群組通知，不會播報。
+
+使用方式：`send_message(chat_id=8209401698, text=...)`（**不帶** topic_id）。
+
+前置條件：用戶必須先在 Telegram 對 bot 送 `/start`（Casper 已完成 2026-04-15）。
+
 ## Channel Directory (指揮中心)
 
 When you need to send to a channel other than your default, use send_message with:

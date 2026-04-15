@@ -54,6 +54,15 @@ Each workspace's `.mcp.json` can include HTTP headers that set the default Teleg
 | `X-Default-Chat-Id` | Default Telegram chat ID (required for `notify`) |
 | `X-Default-Topic-Id` | Default `message_thread_id` for topic routing (omit for General topic) |
 
+### Known Chat IDs
+
+| chat_id | Name | Use |
+|---|---|---|
+| `8209401698` | Casper DM (`@aviman1109` ↔ `@casper_nexus_bot`) | **Training / race live push** — iOS Siri reads DM aloud; topic messages do not broadcast |
+| `-1003728321833` | 指揮中心 group | Platform / multi-topic routing (see topics 3–6 above) |
+
+DMs require the user to `/start` the bot first.
+
 ## Usage
 
 ### Docker Compose

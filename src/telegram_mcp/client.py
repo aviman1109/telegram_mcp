@@ -13,7 +13,7 @@ def _md_to_html(text: str) -> str:
     """Convert common Markdown patterns to Telegram-compatible HTML.
 
     Handles: **bold**, *italic*, `code`, ```pre```, ~strikethrough~,
-    [text](url), and bullet points (• / - / *).
+    [text](url), headings (#/##/###), horizontal rules (---), and tables.
     """
     # Escape HTML entities first
     text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
@@ -23,6 +23,24 @@ def _md_to_html(text: str) -> str:
 
     # Inline code (`...`)
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+
+    # Headings (# / ## / ###) → bold
+    text = re.sub(r"^#{1,6}\s+(.+)$", r"<b>\1</b>", text, flags=re.MULTILINE)
+
+    # Horizontal rules (--- or ===) → em dash line
+    text = re.sub(r"^[-=]{3,}\s*$", "─────────────", text, flags=re.MULTILINE)
+
+    # Tables: strip separator rows (|---|---|) and convert data rows to plain text
+    def _table_row(m: re.Match) -> str:
+        row = m.group(0)
+        # Skip separator rows (only dashes, pipes, colons, spaces)
+        if re.match(r"^\|[\s\-:|]+\|$", row.strip()):
+            return ""
+        # Extract cells, strip whitespace
+        cells = [c.strip() for c in row.strip().strip("|").split("|")]
+        return "  ".join(cells)
+
+    text = re.sub(r"^\|.+\|$", _table_row, text, flags=re.MULTILINE)
 
     # Bold (**...**)
     text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
